@@ -1,0 +1,53 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-card {
+    width: 100%;
+    max-width: 28rem; /* Tailwind's max-w-md */
+    margin-left: 1rem; /* Tailwind's mx-4 */
+    margin-right: 1rem;
+    .brand-title {
+      font-size: 1.875rem; /* Tailwind's text-3xl */
+      line-height: 2.25rem; /* Tailwind's text-3xl */
+      font-weight: 700;     /* Tailwind's font-bold */
+      color: #9c27b0;       /* Tailwind's text-primary (custom) */
+      margin-bottom: 0.5rem; /* Tailwind's mb-2 */
+    }
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.brand-title {
+  font-size: 1.875rem;    /* Tailwind's text-3xl */
+  line-height: 2.25rem;   /* Tailwind's text-3xl */
+  font-weight: 700;       /* Tailwind's font-bold */
+  color: #9c27b0;         /* Tailwind's text-primary (custom) */
+  margin-bottom: 0.5rem;  /* Tailwind's mb-2 */
+}
+
+.brand-subtitle {
+  color: #4b5563; /* Tailwind's text-gray-600 */
+  font-size: 0.875rem; /* Tailwind's text-sm (14px) */
+  line-height: 1.25rem; /* Tailwind's text-sm line-height */
+}
+
+.login-form {
+  /* Equivalent to Tailwind's space-y-4: adds 1rem margin-top to all children except the first */
+  & > * + * {
+    margin-top: 1rem;
+  }
+}
+
+.login-button {
+  margin-top: 1.5rem; /* Equivalent to mt-6 in Tailwind */
+  height: 48px;
+}
+
+.demo-info {
+  margin-top: 1rem;    /* mt-4 */
+  padding: 1rem;       /* p-4 */
+  background-color: #f9fafb; /* bg-gray-50 */
+  border-radius: 0.25rem;    /* rounded */
+}

@@ -1,0 +1,25 @@
+.orders-container {
+  @apply max-w-6xl mx-auto;
+}
+
+.header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.loading-container {
+  @apply flex flex-col items-center justify-center py-12;
+  
+  mat-spinner {
+    @apply mb-4;
+  }
+}
+
+.empty-state {
+  mat-icon {
+    @apply text-6xl text-gray-400 mb-4;
+  }
+}
+
+.actions {
+  @apply flex gap-2;
+}

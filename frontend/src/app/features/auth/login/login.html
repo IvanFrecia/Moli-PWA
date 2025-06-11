@@ -1,0 +1,67 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title class="text-center w-full">
+        <h1 class="brand-title">Moli</h1>
+        <p class="brand-subtitle">Plataforma de Abastecimiento</p>
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput 
+                 type="email" 
+                 formControlName="email" 
+                 placeholder="ejemplo@panaderia.com">
+          <mat-icon matSuffix>email</mat-icon>
+          @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+            <mat-error>Por favor ingrese un email válido</mat-error>
+          }
+          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+            <mat-error>El email es requerido</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Contraseña</mat-label>
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'" 
+                 formControlName="password">
+          <button type="button" 
+                  mat-icon-button 
+                  matSuffix 
+                  (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+            <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+          }
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <mat-error>La contraseña es requerida</mat-error>
+          }
+        </mat-form-field>
+
+        <button type="submit" 
+                mat-raised-button 
+                color="primary" 
+                class="login-button w-full"
+                [disabled]="loginForm.invalid || isLoading">
+          @if (isLoading) {
+            <span>Iniciando sesión...</span>
+          } @else {
+            <span>Iniciar Sesión</span>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+    
+    <mat-card-footer class="demo-info">
+      <p class="text-sm text-gray-600 text-center">
+        <strong>Demo:</strong> Use cualquier email válido<br>
+        Incluya "molino" en el email para rol de molino
+      </p>
+    </mat-card-footer>
+  </mat-card>
+</div>

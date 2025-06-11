@@ -1,0 +1,147 @@
+<div class="payment-container p-6 max-w-2xl mx-auto">
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p class="loading-text">Cargando información del pedido...</p>
+    </div>
+  } @else if (order) {
+    <mat-card class="payment-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="payment-icon">payment</mat-icon>
+          Procesar Pago
+        </mat-card-title>
+        <mat-card-subtitle>
+          Pedido #{{order.id}} - {{order.clientName}}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Order Status -->
+        <div class="status-section">
+          <h3>Estado del Pedido</h3>
+          <mat-chip [color]="getStatusColor(order.status)">
+            {{order.status}}
+          </mat-chip>
+        </div>
+
+        <!-- Order Details -->
+        <div class="order-details-section">
+          <h3>Detalles del Pedido</h3>
+          <div class="detail-row">
+            <span class="label">Cliente:</span>
+            <span class="value">{{order.clientName}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Email:</span>
+            <span class="value">{{order.clientEmail}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Teléfono:</span>
+            <span class="value">{{order.clientPhone}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Fecha de Entrega:</span>
+            <span class="value">{{order.deliveryDate | date:'dd/MM/yyyy'}}</span>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="items-section">
+          <h3>Productos</h3>
+          <div class="items-list">
+            @for (item of order.items; track $index) {
+              <div class="item-row">
+                <div class="item-details">
+                  <span class="item-name">{{getProductName(item.productType)}}</span>
+                  <span class="item-specs">{{item.quantity}} {{item.unit}} × ${{item.unitPrice | number:'1.2-2'}}</span>
+                </div>
+                <div class="item-total">
+                  ${{(item.quantity * item.unitPrice) | number:'1.2-2'}}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Total Section -->
+        <div class="total-section">
+          <div class="total-row">
+            <span class="total-label">Total a Pagar:</span>
+            <span class="total-amount">${{order.totalAmount | number:'1.2-2'}}</span>
+          </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="payment-info">
+          <h3>Información de Pago</h3>
+          <div class="payment-methods">
+            <div class="method-item">
+              <mat-icon>credit_card</mat-icon>
+              <span>Tarjetas de crédito y débito</span>
+            </div>
+            <div class="method-item">
+              <mat-icon>account_balance</mat-icon>
+              <span>Transferencia bancaria</span>
+            </div>
+            <div class="method-item">
+              <mat-icon>money</mat-icon>
+              <span>Efectivo (Rapipago, Pago Fácil)</span>
+            </div>
+          </div>
+          
+          <div class="security-info">
+            <mat-icon>security</mat-icon>
+            <span>Pago seguro procesado por Mercado Pago</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end" class="payment-actions">
+        <button type="button" mat-button (click)="goBack()" [disabled]="isProcessingPayment">
+          <mat-icon>arrow_back</mat-icon>
+          Volver
+        </button>
+        
+        <button type="button" 
+                mat-raised-button 
+                color="primary" 
+                class="pay-button"
+                (click)="processPayment()" 
+                [disabled]="isProcessingPayment || order.status !== 'Aprobado'">
+          @if (isProcessingPayment) {
+            <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            Procesando...
+          } @else {
+            <mat-icon>payment</mat-icon>
+            Pagar ${{order.totalAmount | number:'1.2-2'}}
+          }
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Terms and Conditions -->
+    <div class="terms-section">
+      <p class="terms-text">
+        Al proceder con el pago, aceptas los 
+        <a href="#" class="terms-link">términos y condiciones</a> 
+        y la 
+        <a href="#" class="terms-link">política de privacidad</a> 
+        de Moli.
+      </p>
+    </div>
+  } @else {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <h2>Pedido no encontrado</h2>
+          <p>No se pudo cargar la información del pedido.</p>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            Volver a Pedidos
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

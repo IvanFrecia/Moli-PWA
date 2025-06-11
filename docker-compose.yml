@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  # PostgreSQL Database para desarrollo
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: moli
+      POSTGRES_PASSWORD: moli123
+      POSTGRES_DB: moli_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "moli"]
+      interval: 5s
+      retries: 5
+
+  # Backend FastAPI (desarrollo)
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://moli:moli123@db:5432/moli_dev
+      - JWT_SECRET=dev-secret-key
+      - MERCADOPAGO_ACCESS_TOKEN=TEST-token
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Redis para caché/sessions (opcional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:

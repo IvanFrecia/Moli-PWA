@@ -1,0 +1,28 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-left: 16px;
+}
+
+.user-info {
+  margin-right: 16px;
+  font-size: 0.9rem;
+}
+
+.content {
+  padding: 20px;
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+}

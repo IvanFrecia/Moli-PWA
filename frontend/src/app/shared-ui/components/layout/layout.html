@@ -1,0 +1,44 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" mode="over">
+    <mat-toolbar>Menú</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/orders">
+        <mat-icon matListItemIcon>receipt</mat-icon>
+        <span>Pedidos</span>
+      </a>
+      <a mat-list-item routerLink="/orders/new">
+        <mat-icon matListItemIcon>add</mat-icon>
+        <span>Nuevo Pedido</span>
+      </a>
+      <a mat-list-item routerLink="/tracking" *ngIf="currentUser()?.role !== 'empleado_panaderia'">
+        <mat-icon matListItemIcon>location_on</mat-icon>
+        <span>Seguimiento</span>
+      </a>
+      <a mat-list-item routerLink="/payments" *ngIf="currentUser()?.role !== 'empleado_panaderia'">
+        <mat-icon matListItemIcon>payment</mat-icon>
+        <span>Pagos</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span class="brand">Moli</span>
+      <span class="spacer"></span>
+      
+      @if (currentUser(); as user) {
+        <span class="user-info">{{ user.email }}</span>
+        <button mat-icon-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      }
+    </mat-toolbar>
+    
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

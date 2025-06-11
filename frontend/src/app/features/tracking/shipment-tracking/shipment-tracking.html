@@ -1,0 +1,159 @@
+<div class="tracking-container p-6 max-w-4xl mx-auto">
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p class="loading-text">Cargando información de seguimiento...</p>
+    </div>
+  } @else if (order && shipment) {
+    <!-- Header -->
+    <mat-card class="tracking-header">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="tracking-icon">local_shipping</mat-icon>
+          Seguimiento de Envío
+        </mat-card-title>
+        <mat-card-subtitle>
+          Pedido #{{order.id}} - {{order.clientName}}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="status-info">
+          <div class="status-item">
+            <span class="label">Estado:</span>
+            <mat-chip [color]="getStatusColor(shipment.status)">
+              {{shipment.status}}
+            </mat-chip>
+          </div>
+          <div class="status-item">
+            <span class="label">Tiempo estimado de llegada:</span>
+            <span class="value">{{getEstimatedArrival()}}</span>
+          </div>
+          <div class="status-item">
+            <span class="label">Última actualización:</span>
+            <span class="value">{{shipment.recordedAt | date:'dd/MM/yyyy HH:mm'}}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Map Container -->
+    <mat-card class="map-container">
+      <mat-card-header>
+        <mat-card-title>Ubicación en Tiempo Real</mat-card-title>
+        <div class="map-actions">
+          <button mat-icon-button 
+                  color="primary" 
+                  (click)="refreshLocation()"
+                  matTooltip="Actualizar ubicación">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      
+      <mat-card-content class="map-content">
+        <div id="map" class="map"></div>
+        
+        <!-- Map Legend -->
+        <div class="map-legend">
+          <div class="legend-item">
+            <img src="https://maps.google.com/mapfiles/ms/icons/truck.png" 
+                 alt="Envío" 
+                 class="legend-icon">
+            <span>Ubicación del envío</span>
+          </div>
+          <div class="legend-item">
+            <img src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" 
+                 alt="Destino" 
+                 class="legend-icon">
+            <span>Destino</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Delivery Information -->
+    <mat-card class="delivery-info">
+      <mat-card-header>
+        <mat-card-title>Información de Entrega</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-section">
+            <h4>Destinatario</h4>
+            <div class="detail-row">
+              <span class="label">Nombre:</span>
+              <span class="value">{{order.clientName}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Teléfono:</span>
+              <span class="value">{{order.clientPhone}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email:</span>
+              <span class="value">{{order.clientEmail}}</span>
+            </div>
+          </div>
+          
+          <div class="info-section">
+            <h4>Dirección de Entrega</h4>
+            <div class="address">
+              <p>{{order.deliveryAddress.street}}</p>
+              <p>{{order.deliveryAddress.city}}, {{order.deliveryAddress.province}}</p>
+              <p>{{order.deliveryAddress.postalCode}}, {{order.deliveryAddress.country}}</p>
+            </div>
+          </div>
+          
+          <div class="info-section">
+            <h4>Detalles del Pedido</h4>
+            <div class="detail-row">
+              <span class="label">Fecha de entrega:</span>
+              <span class="value">{{order.deliveryDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Total:</span>
+              <span class="value total-amount">${{order.totalAmount | number:'1.2-2'}}</span>
+            </div>
+            @if (order.notes) {
+              <div class="detail-row">
+                <span class="label">Notas:</span>
+                <span class="value">{{order.notes}}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver a Pedidos
+      </button>
+      
+      <a mat-raised-button 
+         color="primary" 
+         href="tel:{{order.clientPhone}}"
+         class="contact-button">
+        <mat-icon>phone</mat-icon>
+        Contactar Cliente
+      </a>
+    </div>
+
+  } @else {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <h2>Información no disponible</h2>
+          <p>No se pudo cargar la información del seguimiento.</p>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            Volver a Pedidos
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
