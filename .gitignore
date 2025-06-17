@@ -57,3 +57,10 @@ infra/.terraform/
 # Temporary
 tmp/
 temp/
+
+# Copilot
+copilot-guidelines
+
+# Data files
+data
+backend/data
