@@ -62,5 +62,5 @@ temp/
 copilot-guidelines
 
 # Data files
-data
-backend/data
+processed
+raw
